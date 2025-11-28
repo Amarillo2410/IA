@@ -206,10 +206,26 @@ let deleteClientId = null
 
 // ===== INICIALIZACIÓN =====
 document.addEventListener("DOMContentLoaded", () => {
-  loadData()
-  setupNavigation()
-  updateStats()
-  renderTable()
+  console.log("[v0] DOM cargado correctamente")
+  console.log("[v0] Inicializando aplicación TrendGear...")
+
+  try {
+    loadData()
+    console.log("[v0] Datos cargados:", clientsData.length, "clientes")
+
+    setupNavigation()
+    console.log("[v0] Navegación configurada")
+
+    updateStats()
+    console.log("[v0] Estadísticas actualizadas")
+
+    renderTable()
+    console.log("[v0] Tabla renderizada")
+
+    console.log("[v0] Aplicación iniciada correctamente")
+  } catch (error) {
+    console.error("[v0] Error durante la inicialización:", error)
+  }
 })
 
 // ===== CARGAR/GUARDAR DATOS =====
@@ -230,16 +246,31 @@ function saveData() {
 
 // ===== NAVEGACIÓN =====
 function setupNavigation() {
-  document.querySelectorAll(".nav-link").forEach((link) => {
+  const navLinks = document.querySelectorAll(".nav-link")
+  console.log("[v0] Enlaces de navegación encontrados:", navLinks.length)
+
+  navLinks.forEach((link) => {
+    const section = link.dataset.section
+    console.log("[v0] Configurando enlace para sección:", section)
+
     link.addEventListener("click", (e) => {
       e.preventDefault()
-      const section = link.dataset.section
+      console.log("[v0] Click en navegación, sección:", section)
       navigateTo(section)
     })
   })
 }
 
 function navigateTo(sectionId) {
+  console.log("[v0] Navegando a sección:", sectionId)
+
+  // Verificar que la sección existe
+  const targetSection = document.getElementById(sectionId)
+  if (!targetSection) {
+    console.error("[v0] ERROR: No se encontró la sección:", sectionId)
+    return
+  }
+
   // Actualizar navegación
   document.querySelectorAll(".nav-link").forEach((link) => {
     link.classList.toggle("active", link.dataset.section === sectionId)
@@ -247,7 +278,9 @@ function navigateTo(sectionId) {
 
   // Mostrar sección
   document.querySelectorAll(".section").forEach((section) => {
-    section.classList.toggle("active", section.id === sectionId)
+    const isTarget = section.id === sectionId
+    section.classList.toggle("active", isTarget)
+    console.log("[v0] Sección", section.id, "activa:", isTarget)
   })
 
   // Actualizar estadísticas si vamos a bienvenida
@@ -255,6 +288,8 @@ function navigateTo(sectionId) {
     updateStats()
   }
 }
+
+window.navigateTo = navigateTo
 
 // ===== ESTADÍSTICAS =====
 function updateStats() {
@@ -402,6 +437,7 @@ function filterClients() {
 
 // ===== MODAL =====
 function openModal(clientId = null) {
+  console.log("[v0] Abriendo modal, clientId:", clientId)
   const modal = document.getElementById("modal")
   const form = document.getElementById("client-form")
   const titleText = document.getElementById("modal-title-text")
@@ -534,3 +570,14 @@ document.getElementById("delete-modal").addEventListener("click", (e) => {
     closeDeleteModal()
   }
 })
+
+window.openModal = openModal
+window.closeModal = closeModal
+window.editClient = editClient
+window.saveClient = saveClient
+window.deleteClient = deleteClient
+window.closeDeleteModal = closeDeleteModal
+window.confirmDelete = confirmDelete
+window.searchClients = searchClients
+window.filterClients = filterClients
+window.goToPage = goToPage
