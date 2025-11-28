@@ -1,0 +1,1 @@
+https://692985e978ce27f2030807e7--genuine-bublanina-1026cd.netlify.app/
